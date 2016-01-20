@@ -119,7 +119,10 @@
             | fieldFilter:'main_char':selectedMainChar.main_char
             | fieldFilter:'volume_2013_granular':selectedVolume2013Granular.volume_2013_granular
             | fieldFilter:'location_area':selectedLocationArea.location_area
-            | fieldFilter:['operation_field','operation_field_2']:selectedOperationField">
+            | fieldFilter:['operation_field','operation_field_2']:selectedOperationField"
+                ng-mouseenter="main.onHover(row,$event)"
+                ng-mouseleave="main.onHover(null)"
+            >
               <td>{{ row.alias || row.name}}</td>
               <td>{{ row.main_char }}</td>
               <td>{{ row.age }}</td>
@@ -139,17 +142,102 @@
         </div>
       </div>
 
-    </div>
 
-    <div class="panel">
-      <
-    </div>
-
-    <div class="footer">
-      <div class="container">
-        <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
+      <div class="arrow_box panel panel-default" ng-show="(r = main.selectedRow) !== null" id="detail-card" style="width:100%">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{ main.selectedRow.alias || main.selectedRow.name }} <small>{{ r.reg_kind }} {{r.reg_id}}</small></h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <span class="col-sm-4">
+              <h4>פרופיל</h4>
+              <p>
+                גיל:
+                {{ r.age }}
+                שנים
+                (רישום בשנת
+                {{ r.reg_year}})
+              </p>
+              <p>
+                <strong>מיקום:</strong>
+                {{ r.location_hq_town }}
+                <span ng-if="r.location_branch_towns.length > 0">
+                  (סניפים נוספים ב:
+      {{ r.location_branch_towns }})
+                </span>
+              </p>
+              <p><strong>יו״ר: </strong>{{ r.chair }}</p>
+              <p><strong>מנכ״ל: </strong>{{ r.ceo  }}</p>
+            </span>
+            <span class="col-sm-3">
+              <h4>חוק ונוהל</h4>
+              <ul>
+                <li>
+                  ניהול תקין:
+                  {{ r.cert_proper }}
+                </li>
+                <li>
+                  אישור 46:
+                  {{ r.cert_46 }}
+                </li>
+              </ul>
+            </span>
+            <span class="col-sm-5">
+              <h4>פעילות</h4>
+              <strong>
+                תחום פעולה עיקרי:
+                <span>{{ r.sector }}</span> /
+                <span ng-if="r.operation_field.length > 0">{{ r.operation_field }}</span>
+                <span ng-if="r.operation_field.length > 0 && r.operation_field_2.length > 0">, </span>
+                <span ng-if="r.operation_field_2.length > 0 && (r.operation_field !== r.operation_field_2)">{{ r.operation_field_2 }}</span>
+              </strong>
+              <ul>
+                <li ng-if="r.activities_1.length>0">{{ r.activities_1 }}</li>
+                <li ng-if="r.activities_2.length>0">{{ r.activities_2 }}</li>
+                <li ng-if="r.activities_3.length>0">{{ r.activities_3 }}</li>
+              </ul>
+            </span>
+          </div>
+          <hr/>
+          <div class="row">
+            <span class="col-sm-12">
+              <p>
+                <strong>חזון וייעוד:</strong> {{ r.vision }}
+              </p>
+              <p>
+                <strong>הישגים:</strong> {{ r.achievements }}
+              </p>
+            </span>
+          </div>
+          <hr/>
+          <div class="row">
+            <span class="col-sm-5">
+              <h4>מי?</h4>
+              <p><strong>קהל יעד: </strong>{{r.target_audience}}</p>
+              <p><strong>עובדים בשכר: </strong>{{r.employee_num}}</p>
+              <p><strong>מספר מתנדבים: </strong>{{r.volunteer_num}}</p>
+              <p><strong>מוטבים ישירים: </strong>{{r.beneficiary_num}}</p>
+            </span>
+            <span class="col-sm-7">
+              <h4>פיננסי</h4>
+              <p><strong>מחזור כספי 2013 (₪): </strong>{{r.volume_2013 | number }}</p>
+              <br/>
+              <p><strong>שיעור הכנסות מרשויות (%) </strong>{{r.income_gov_pct}}%</p>
+              <p><strong>שיעור הכנסות מפילנתרופיה (%): </strong>{{r.income_phil_pct}}%</p>
+              <p><strong>שיעור הכנסות בשווי ערך (%): </strong>{{r.income_equiv_pct}}%</p>
+              <p><strong>שיעור הכנסות עצמיות (%): </strong>{{r.income_internal_pct}}%</p>
+              <br/>
+              <p><strong>שיעור הוצאות הנה"כ, כולל גיוס משאבים (%): </strong>{{r.spending_admin_pct}}%</p>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!--<div class="footer">-->
+      <!--<div class="container">-->
+      <!--</div>-->
+    <!--</div>-->
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
