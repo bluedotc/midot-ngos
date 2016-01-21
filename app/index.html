@@ -69,9 +69,9 @@
         <div class="col-lg-12">
           <form class="form-inline">
             <div class="form-group">
-              <label for="mainCharFilter">מאפיין מרכזי</label><br/>
-              <select id="mainCharFilter" class="form-control" ng-model="selectedMainChar"
-                      ng-options="x.main_char for x in (main.rows | unique:'main_char' ) track by x.main_char">
+              <label for="sectorFilter">סיווג ענפי</label><br/>
+              <select id="sectorFilter" class="form-control" ng-model="selectedSector"
+                      ng-options="x.sector for x in (main.rows | unique:'sector' ) track by x.sector">
                 <option></option>
               </select>
             </div>
@@ -103,10 +103,10 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="panel panel-default">
-            <div class="panel-body" ng-if="main.subjects[selectedMainChar.main_char]">
-              {{ main.subjects[selectedMainChar.main_char] }}
+            <div class="panel-body" ng-if="main.subjects[selectedSector.sector]">
+              {{ main.subjects[selectedSector.sector] }}
             </div>
-            <div class="panel-body" ng-if="!main.subjects[selectedMainChar.main_char]">
+            <div class="panel-body" ng-if="!main.subjects[selectedSector.sector]">
               {{ main.subjects['*'] }}
             </div>
           </div>
@@ -184,6 +184,7 @@
                 (רישום בשנת
                 {{ r.reg_year}})
               </p>
+              <p><strong>מאפיין מרכזי: </strong>{{ r.main_char }}</p>
               <p>
                 <strong>מיקום:</strong>
                 {{ r.location_hq_town }}
@@ -212,7 +213,6 @@
               <h4>פעילות</h4>
               <strong>
                 תחום פעולה עיקרי:
-                <span>{{ r.sector }}</span> /
                 <span ng-if="r.operation_field.length > 0">{{ r.operation_field }}</span>
                 <span ng-if="r.operation_field.length > 0 && r.operation_field_2.length > 0">, </span>
                 <span ng-if="r.operation_field_2.length > 0 && (r.operation_field !== r.operation_field_2)">{{ r.operation_field_2 }}</span>

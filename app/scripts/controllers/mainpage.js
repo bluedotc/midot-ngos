@@ -36,8 +36,8 @@ angular.module('midotApp')
     function updateFiltered() {
       var f = $filter('filter')(that.rows, $scope.query);
       var stats = {};
-      if ( $scope.selectedMainChar ) {
-        f = $filter('fieldFilter')(f,'main_char',$scope.selectedMainChar.main_char);
+      if ( $scope.selectedSector ) {
+        f = $filter('fieldFilter')(f,'sector',$scope.selectedSector.sector);
       }
       if ( $scope.selectedVolume2013Granular ) {
         f = $filter('fieldFilter')(f, 'volume_2013_granular', $scope.selectedVolume2013Granular.volume_2013_granular);
@@ -50,8 +50,8 @@ angular.module('midotApp')
       }
       that.filteredRows = f;
 
-      if ( !$scope.selectedMainChar ) {
-        stats['מאפיין ראשי'] = calcStats(f, 'main_char');
+      if ( !$scope.selectedSector ) {
+        stats['סיווג ענפי'] = calcStats(f, 'sector');
       }
       if ( !$scope.selectedVolume2013Granular ) {
         stats['מחזור כספי'] = calcStats(f, 'volume_2013_granular');
@@ -67,7 +67,7 @@ angular.module('midotApp')
       that.stats = stats;
     }
 
-    $scope.$watchGroup(['query','selectedMainChar', 'selectedVolume2013Granular', 'selectedLocationArea', 'selectedOperationField'],
+    $scope.$watchGroup(['query','selectedSector', 'selectedVolume2013Granular', 'selectedLocationArea', 'selectedOperationField'],
       function() {
         updateFiltered();
       }
