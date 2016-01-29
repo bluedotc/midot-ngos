@@ -12,6 +12,9 @@ angular.module('midotApp')
     var that = this;
     this.selectedRow = null;
     this.rows = [];
+    this.minVolumeLabel = '';
+    this.maxVolumeLabel = '';
+
     rows.then(function(data) {
       that.rows = data.amutot;
       that.subjects = data.subjects;
@@ -39,8 +42,8 @@ angular.module('midotApp')
       if ( $scope.selectedSector ) {
         f = $filter('fieldFilter')(f,'sector',$scope.selectedSector.sector);
       }
-      if ( $scope.selectedVolume2013Granular ) {
-        f = $filter('fieldFilter')(f, 'volume_2013_granular', $scope.selectedVolume2013Granular.volume_2013_granular);
+      if ( $scope.minVolume >=0 && $scope.maxVolume >= 0 ) {
+        f = $filter('fieldRangeFilter')(f, 'volume_2013', $scope.minVolume, $scope.maxVolume);
       }
       if ( $scope.selectedLocationArea ) {
         f = $filter('fieldFilter')(f, 'location_area', $scope.selectedLocationArea.location_area);
@@ -63,36 +66,68 @@ angular.module('midotApp')
         $scope.selectedStat = _.keys(stats)[0];
       }
 
-      console.log(stats);
       that.stats = stats;
+
+      window.setTimeout(function() {
+        var columns = $($('.table tr')[2]).find('td');
+        var headers = $('.table th');
+        for ( var i = 0 ; i < columns.length ; i++ ) {
+          $(headers[i]).width( $(columns[i]).width() );
+        }
+        window.setTimeout(function() {
+          var h = $($('.table thead tr')[0]).height();
+          $($('.table td div')[0]).height(h-16);
+        });
+      },0);
     }
 
-    $scope.$watchGroup(['query','selectedSector', 'selectedVolume2013Granular', 'selectedLocationArea', 'selectedOperationField'],
+    $scope.$watchGroup(['query','selectedSector', 'minVolume', 'maxVolume', 'selectedLocationArea', 'selectedOperationField'],
       function() {
         updateFiltered();
       }
     );
 
-    this.onHover = function(row,event) {
-      that.selectedRow = row;
-      if ( row !== null ) {
-        var el = $(event.currentTarget);
-        var width = el.width();
-        var parentwidth = el.closest('.row').width();
-        console.log(width,parentwidth);
-        var height = el.height();
-        //var next = $(event.currentTarget.nextElementSibling);
-        var panel = $("#detail-card");
-        var pos = el.offset();
-        panel.css('width',parentwidth+'px');
-        if (pos) {
-          console.log(pos);
-          panel.css('position','absolute');
-          panel.css('top',(pos.top+22+height)+'px');
-          panel.css('right',(pos.left-parentwidth+width)+'px');
-        } else {
-          panel.css('position','static');
-        }
-      }
+    $scope.isNumber= function (n) {
+      return !isNaN(parseFloat(n)) && isFinite(n);
     };
+
+    this.onClick = function(row) {
+      $scope.selectedRow = $scope.selectedRow === row ? null : row;
+    };
+
+    $(function() {
+      $('[data-clampedwidth]').each(function () {
+        var elem = $(this);
+        var parentPanel = elem.data('clampedwidth');
+        var resizeFn = function () {
+          var sideBarNavWidth = $(parentPanel).width();// - parseInt(elem.css('paddingLeft')) - parseInt(elem.css('paddingRight')) - parseInt(elem.css('marginLeft')) - parseInt(elem.css('marginRight')) - parseInt(elem.css('borderLeftWidth')) - parseInt(elem.css('borderRightWidth'));
+          elem.css('width', sideBarNavWidth);
+        };
+
+        resizeFn();
+        $(window).resize(resizeFn);
+      });
+      that.volumeSlider = new Slider("#volume2013GranularSlider");
+      that.volumeSlider.on('slide', function() {
+        var values = that.volumeSlider.getValue();
+        var x = {
+          8: ['0', 0],
+          7: ['מיליון', 1000000],
+          6: ['5 מיליון', 5000000],
+          5: ['10 מיליון', 10000000],
+          4: ['25 מיליון', 25000000],
+          3: ['50 מיליון', 50000000],
+          2: ['100 מיליון', 100000000],
+          1: ['500 מיליון', 500000000],
+          0: ['מיליארד', 1000000000]
+        };
+        that.minVolumeLabel = x[values[1]][0];
+        that.maxVolumeLabel = x[values[0]][0];
+        $scope.minVolume = x[values[1]][1];
+        $scope.maxVolume = x[values[0]][1];
+        $scope.$apply();
+      });
+      that.volumeSlider._trigger('slide');
+    });
+
   });

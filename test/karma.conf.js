@@ -35,6 +35,7 @@ module.exports = function(config) {
       'bower_components/tabletop/src/tabletop.js',
       'bower_components/angular-tabletop/TabletopProvider.js',
       'bower_components/underscore/underscore.js',
+      'bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",
