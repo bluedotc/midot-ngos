@@ -56,8 +56,6 @@
                    data-slider-value="[0,8]"
                    data-slider-tooltip="hide"
             />
-            <!--data-slider-ticks-labels='["0", "1", "5", "10", "25", "50", "100", "500", "1000"]'-->
-            <!--data-slider-ticks="[0, 1, 2, 3, 4, 5, 6, 7, 8]"-->
             <div class="form-group">
               <select id="locationAreaFilter" class="form-control" ng-model="selectedLocationArea"
                       ng-options="x.location_area for x in (main.rows | unique:'location_area' ) track by x.location_area">
@@ -72,25 +70,30 @@
               </select>
             </div>
           </form>
-          <hr/>
-          <div class="card card-default">
-            <form class="visualization-select form-inline">
-              <strong>פילוח לפי: </strong>
-              <select class="form-control" ng-model='selectedStat' ng-required="true" ng-options="key as key for (key,value) in main.stats "></select>
-            </form>
-            <!--<select ng-model='selectedStat' ng-required="true" ng-options="key as key for (key,value) in main.stats "></select>-->
-            <div class="card-body">
-              <div ng-repeat="stat in main.stats[selectedStat]">
-                <small>{{ stat[0] }} ({{stat[1]}})</small>
-                <div class="progress" >
-                  <div class="progress-bar" role="progressbar" aria-valuenow="{{stat[1]}}" aria-valuemin="0" aria-valuemax="100"
-                       style="width: {{stat[2]}}%;">
-                  </div>
-                </div>
-              </div>
-
-            </div>
+          <div class="btn-group">
+            <button type="button" class="btn btn-xs  btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+              שמירה לקובץ Excel <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a ng-click="main.downloadData(main.rows)" href="#">כל הרשומות</a></li>
+              <li><a ng-click="main.downloadData(main.filteredRows)" href="#">הרשומות המסוננות בלבד</a></li>
+            </ul>
           </div>
+          <hr/>
+          <form class="visualization-select form-inline">
+            <strong>פילוח לפי: </strong>
+            <select class="form-control" ng-model='selectedStat' ng-required="true" ng-options="key as key for (key,value) in main.stats "></select>
+          </form>
+          <div id="pieChart"></div>
+          <!--div ng-repeat="stat in main.stats[selectedStat]">
+            <small>{{ stat[0] }} ({{stat[1]}})</small>
+            <div class="progress" >
+              <div class="progress-bar" role="progressbar" aria-valuenow="{{stat[1]}}" aria-valuemin="0" aria-valuemax="100"
+                   style="width: {{stat[2]}}%;">
+              </div>
+            </div>
+          </div-->
         </div>
         <div class="col-lg-9 left-col">
           <div>
@@ -138,8 +141,8 @@
                       <h4>{{ row.alias || row.name }} ({{ row.reg_kind }})</h4>
                       <span><strong>ע״ר  {{row.reg_id}}</strong></span>|
                       <span><strong>שנת יסוד: </strong>{{row.year}}</span>|
-                      <span><strong>אישור ניהול תקין: </strong>{{row.cert_proper ? 'קיים' : 'אין'}}</span>|
-                      <span><strong>אישור 46: </strong>{{row.cert_46 ? 'קיים' : 'אין'}}</span>
+                      <span><strong>אישור ניהול תקין: </strong>{{row.cert_proper}}</span>|
+                      <span><strong>אישור 46: </strong>{{row.cert_46}}</span>
                     </div>
                     <div class="card-body">
                       <div class="row">
@@ -265,10 +268,16 @@
     <script src="bower_components/angular-tabletop/TabletopProvider.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
     <script src="bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js"></script>
+    <script src="bower_components/papaparse/papaparse.js"></script>
+    <script src="bower_components/windows-1255/windows-1255.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
+    <script src="bower_components/d3-tip/index.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="vendor-scripts/d3pie.min.js"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>

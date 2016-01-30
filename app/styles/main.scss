@@ -2,6 +2,7 @@
 // endbower
 
 @import url(http://fonts.googleapis.com/earlyaccess/opensanshebrew.css);
+@import 'd3-tip';
 
 .browsehappy {
   margin: 0.2em 0;
@@ -165,6 +166,13 @@ body {
       margin-top:15px;
     }
 
+  }
+
+  .btn-group {
+    float:left;
+    margin-left:20px;
+    margin-top:15px;
+    margin-bottom:15px;
   }
 
   .visualization-select {

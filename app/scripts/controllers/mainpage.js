@@ -12,27 +12,38 @@ angular.module('midotApp')
     var that = this;
     this.selectedRow = null;
     this.rows = [];
-    this.minVolumeLabel = '';
-    this.maxVolumeLabel = '';
+    this.updatePie = null;
 
     rows.then(function(data) {
+      that.rows = data.amutot;
+      that.columns = data.columns;
+      that.headers = data.headers;
       that.rows = data.amutot;
       that.subjects = data.subjects;
       that.stats = {};
       that.operation_fields =
-        _.union(_.map(that.rows, function(d) { return d.operation_field; }),
-                _.map(that.rows, function(d) { return d.operation_field_2; }));
+        _.sortBy(
+          _.union(_.map(that.rows, function(d) { return d.operation_field; }),
+                  _.map(that.rows, function(d) { return d.operation_field_2; })),
+          function(x) {
+            return x;
+          });
+      that.operation_fields =
+        _.filter(that.operation_fields, function(d) { return d!==null;});
       updateFiltered();
     });
 
     function calcStats(list, field) {
       var ret =  _.countBy(list, field);
-      var max = _.max(_.values(ret));
+      var max = d3.sum(_.values(ret));
       ret = _.sortBy(_.pairs(ret), function(d) { return -d[1]; });
-      _.forEach(ret, function(d) {
+      _.forEach(ret, function(d,i) {
+        d[0] = d[0].replace('בין ','').replace(new RegExp(' מיליון','g'), 'M');
         d.push( (100*d[1])/max );
         d.push(field);
+        d.push(i);
       });
+      ret = _.filter(ret, function(d) { return d[0] !== null; });
       return ret;
     }
 
@@ -59,8 +70,8 @@ angular.module('midotApp')
       if ( !$scope.selectedVolume2013Granular ) {
         stats['מחזור כספי'] = calcStats(f, 'volume_2013_granular');
       }
-      if ( $scope.selectedMainChar && !$scope.selectedOperationField ) {
-        stats['תחום פעולה ראשי'] = calcStats(f, 'operation_field');
+      if ( $scope.selectedSector && !$scope.selectedOperationField ) {
+        stats['תחום פעולה'] = calcStats(f, 'operation_field');
       }
       if ( !$scope.selectedStat || !($scope.selectedStat in stats) ) {
         $scope.selectedStat = _.keys(stats)[0];
@@ -79,11 +90,25 @@ angular.module('midotApp')
           $($('.table td div')[0]).height(h-16);
         });
       },0);
+
+      if (!that.updatePie) {
+        that.updatePie = that.drawPie();
+      }
+      that.updatePie(stats[$scope.selectedStat]);
     }
 
     $scope.$watchGroup(['query','selectedSector', 'minVolume', 'maxVolume', 'selectedLocationArea', 'selectedOperationField'],
       function() {
         updateFiltered();
+      }
+    );
+
+    $scope.$watchGroup(['selectedStat'],
+      function() {
+        console.log('selectedStat changed!');
+        if (that.updatePie) {
+          that.updatePie(that.stats[$scope.selectedStat]);
+        }
       }
     );
 
@@ -107,7 +132,7 @@ angular.module('midotApp')
         resizeFn();
         $(window).resize(resizeFn);
       });
-      that.volumeSlider = new Slider("#volume2013GranularSlider");
+      that.volumeSlider = new Slider('#volume2013GranularSlider');
       that.volumeSlider.on('slide', function() {
         var values = that.volumeSlider.getValue();
         var x = {
@@ -130,4 +155,88 @@ angular.module('midotApp')
       that.volumeSlider._trigger('slide');
     });
 
+    this.downloadData = function (rows) {
+      var data = _.map(rows, function(row) {
+        return _.map(that.columns, function(c) {
+          return row[c];
+        });
+      });
+      data.unshift(that.headers);
+      var encodedString = windows1255.encode(Papa.unparse(data), {mode:'html'});
+      var buf = new ArrayBuffer(encodedString.length);
+      var bufView = new Uint8Array(buf);
+      for (var i=0, strLen=encodedString.length; i < strLen; i++) {
+        bufView[i] = encodedString.charCodeAt(i);
+      }
+      var blob = new Blob([buf], { type: 'text/csv' });
+      var url = URL.createObjectURL(blob);
+      var link = document.createElement('a');
+      link.download = 'midot-dataset.csv';
+      link.href = url;
+      link.click();
+    };
+
+    this.drawPie = function() {
+      var width = 220,
+        height = 220,
+        radius = Math.min(width, height) / 2;
+
+      var color = d3.scale.category20();
+
+      var arc = d3.svg.arc()
+        .outerRadius(radius - 10)
+        .innerRadius(0);
+
+      var labelArc = d3.svg.arc()
+        .outerRadius(radius - 40)
+        .innerRadius(radius - 40);
+
+      var pie = d3.layout.pie()
+        .sort(null)
+        .value(function (d) {
+          return d[1];
+        });
+
+      var svg = d3.select('#pieChart').append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .append('g')
+        .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+      var pathsGroup = svg.append('g');
+      var textsGroup = svg.append('g');
+      var tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return d.data[0]+'&rlm; - '+Math.round(d.data[2])+'%'; });
+      svg.call(tip);
+
+      function update(data) {
+        var paths = pathsGroup.selectAll('path.arc')
+          .data(pie(data));
+        paths.exit().remove();
+        paths.enter().append('path')
+          .attr('class', 'arc')
+          .on('mouseover', tip.show)
+          .on('mouseout', tip.hide);
+
+
+        paths.attr('d', arc)
+          .style('fill', function (d) {
+            return color(d.data[4]);
+          });
+
+        var texts = textsGroup.selectAll('text.arc')
+          .data(pie(data));
+        texts.exit().remove();
+        texts.enter().append('text')
+          .attr('class', 'arc')
+          .style('text-anchor','middle')
+          .style('pointer-events','none');
+        texts.attr('transform', function (d) {
+            return 'translate(' + labelArc.centroid(d) + ')';
+          })
+          .text(function (d) {
+            return (d.endAngle - d.startAngle) > 0.5 ? d.data[0] : '';
+          });
+      }
+
+      return update;
+    };
   });

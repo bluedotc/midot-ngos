@@ -36,6 +36,10 @@ module.exports = function(config) {
       'bower_components/angular-tabletop/TabletopProvider.js',
       'bower_components/underscore/underscore.js',
       'bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.js',
+      'bower_components/papaparse/papaparse.js',
+      'bower_components/windows-1255/windows-1255.js',
+      'bower_components/d3/d3.js',
+      'bower_components/d3-tip/index.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",

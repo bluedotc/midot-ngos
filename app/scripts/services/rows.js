@@ -15,22 +15,27 @@ angular.module('midotApp')
       } else {
         Tabletop.then(function(t) {
           var data = {
-            amutot: t[0].amutot.elements,
+            amutot: t[0].amutot.elements.slice(1),
+            columns: t[0].amutot.column_names,
+            headers: t[0].amutot.elements[0],
             subjects: _.object(_.map(t[0].subjects.elements,function(d){
               return [d.subject.trim(), d.text];
             }))
           };
-          _.forEach(data.amutot, function(row) {
-            _.mapObject(row, function(val) {
+          data.headers = _.map(t[0].amutot.column_names, function(h) {
+            return data.headers[h];
+          });
+          data.amutot = _.map(data.amutot, function(row) {
+            row = _.mapObject(row, function(val) {
               val = val.trim();
               if ( val === '' ) {
                 val = null;
               }
               if ( val === '√' ) {
-                val = true;
+                val = 'קיים';
               }
               if ( val === 'X' ) {
-                val = false;
+                val = 'אין';
               }
               return val;
             });
@@ -44,6 +49,7 @@ angular.module('midotApp')
               (row.found_year?
                 row.found_year:
                 null);
+            return row;
           });
           if ( $window.localStorage ) {
             $window.localStorage.data = JSON.stringify(data);
