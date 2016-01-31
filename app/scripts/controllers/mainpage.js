@@ -53,7 +53,7 @@ angular.module('midotApp')
       if ( $scope.selectedSector ) {
         f = $filter('fieldFilter')(f,'sector',$scope.selectedSector.sector);
       }
-      if ( $scope.minVolume >=0 && $scope.maxVolume >= 0 ) {
+      if ( $scope.minVolume >0 || $scope.maxVolume < 1000000000 ) {
         f = $filter('fieldRangeFilter')(f, 'volume_2013', $scope.minVolume, $scope.maxVolume);
       }
       if ( $scope.selectedLocationArea ) {

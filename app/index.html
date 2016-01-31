@@ -71,13 +71,18 @@
             </div>
           </form>
           <div class="btn-group">
-            <button type="button" class="btn btn-xs  btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-              שמירה לקובץ Excel <span class="caret"></span>
+            <button type="button" class="btn btn-sm  btn-default dropdown-toggle excel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <!--<span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>-->
+              שמירה לקובץ Excel
+              <!--<span class="excel"></span>-->
             </button>
             <ul class="dropdown-menu">
-              <li><a ng-click="main.downloadData(main.rows)" href="#">כל הרשומות</a></li>
-              <li><a ng-click="main.downloadData(main.filteredRows)" href="#">הרשומות המסוננות בלבד</a></li>
+              <li><a ng-click="main.downloadData(main.rows)" href="#">כל הרשומות
+              ({{ main.rows.length }} רשומות)
+              </a></li>
+              <li><a ng-click="main.downloadData(main.filteredRows)" href="#">הרשומות המסוננות בלבד
+                ({{ main.filteredRows.length }} רשומות)
+              </a></li>
             </ul>
           </div>
           <hr/>

@@ -120,9 +120,11 @@ body {
 .right-col {
   width:240px;
   padding:0px;
+  height: 100%;
   position: fixed;
   background-color: #fff;
   z-index:1;
+  right:10px;
 
   select {
     background-color: #cceaf6;
@@ -165,7 +167,18 @@ body {
       padding-right:8px;
       margin-top:15px;
     }
+  }
 
+  .excel, .excel.open {
+    //display: inline-block;
+    //position:relative;
+    //width:18px;
+    //height:18px;
+    padding-left:40px;
+    background-image: url("../images/exportExcel.png") !important;
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-color: #cceaf6;
   }
 
   .btn-group {
@@ -213,10 +226,14 @@ body {
 }
 
 .left-col {
-  width:710px;
-  margin-right: 250px;
-  margin-top: 100px;
-  padding:0px;
+  width:730px;
+  position:fixed;
+  top:0px;
+  right:263px;
+  //margin-right: 250px;
+  padding: 100px 10px 10px;
+  overflow-y: scroll;
+  height: 100%;
 }
 
 .upper-text {
@@ -231,16 +248,18 @@ body {
   margin-top: -100px;
   z-index:1;
   border-top: 10px solid white;
+  right:268px;
   //margin-bottom:10px;
 }
 
 .table {
 
   z-index: -1;
-  margin-left:5px;
-  margin-right:5px;
+  //margin-left:5px;
+  //margin-right:5px;
   width:700px;
   table-layout: fixed;
+  //margin-right:0px;
 
   tbody {
     margin-top: 200px;
@@ -285,6 +304,7 @@ body {
     margin-right:-5px;
     width:710px;
     z-index:1;
+    right:273px;
 
     th {
       min-width: 65px;
