@@ -114,7 +114,6 @@ body {
   background-repeat: no-repeat;
   background-position: right center;
   min-height: 100px;
-  margin-top: 10px;
 }
 
 .right-col {
@@ -125,6 +124,7 @@ body {
   background-color: #fff;
   z-index:1;
   right:10px;
+  overflow-y: scroll;
 
   select {
     background-color: #cceaf6;
@@ -132,11 +132,9 @@ body {
   }
 
   .filters {
+    padding-right: 10px;
     select {
       width:220px;
-    }
-    #locationAreaFilter {
-      margin-top: -5px;
     }
     .slider {
       .slider-track {
@@ -152,6 +150,30 @@ body {
         height:14px;
         margin-top:-6px;
         margin-left:-7px;
+
+
+        font-family: 'Glyphicons Halflings';
+        font-style: normal;
+        font-weight: normal;
+        font-size:9px;
+        color:#EDC02B;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+
+        &.min-slider-handle:before {
+          content: "\e250";
+          position: relative;
+          top:2px;
+          left: -2px;
+        }
+
+        &.max-slider-handle:before {
+          content: "\e251";
+          position: relative;
+          top:2px;
+          left: -2.5px;
+        }
       }
       position: relative;
       top: -40px;
@@ -169,22 +191,37 @@ body {
     }
   }
 
-  .excel, .excel.open {
-    //display: inline-block;
-    //position:relative;
-    //width:18px;
-    //height:18px;
-    padding-left:40px;
-    background-image: url("../images/exportExcel.png") !important;
-    background-position: left center;
-    background-repeat: no-repeat;
-    background-color: #cceaf6;
+  //.excel, .excel.open {
+  //  //display: inline-block;
+  //  //position:relative;
+  //  //width:18px;
+  //  //height:18px;
+  //  padding-left:40px;
+  //  background-image: url("../images/exportExcel.png") !important;
+  //  background-position: left center;
+  //  background-repeat: no-repeat;
+  //  background-color: #cceaf6;
+  //}
+
+  .searchResults {
+    .searchResultsBtn {
+      background-image: url("../images/exportExcel.png") !important;
+      background-position: left center;
+      background-repeat: no-repeat;
+      float:left;
+      width:48px;
+      cursor:pointer;
+    }
+    font-size: 16px;
+    color: #033c69;
+    font-weight: bold;
+    line-height: 36px;
+    width: 220px;
   }
 
   .btn-group {
     float:left;
     margin-left:20px;
-    margin-top:15px;
     margin-bottom:15px;
   }
 
@@ -221,7 +258,14 @@ body {
     margin:0;
     margin-top:10px;
     margin-bottom:10px;
-    width: 220px;
+    width: 240px;
+  }
+
+  #pieChart {
+    text {
+      stroke: #033c69;
+      size: 11px;
+    }
   }
 }
 
@@ -231,7 +275,7 @@ body {
   top:0px;
   right:263px;
   //margin-right: 250px;
-  padding: 100px 10px 10px;
+  padding: 90px 10px 10px;
   overflow-y: scroll;
   height: 100%;
 }
@@ -245,9 +289,9 @@ body {
   height:100px;
   overflow-x: hidden;
   padding: 10px;
-  margin-top: -100px;
+  margin-top: -90px;
   z-index:1;
-  border-top: 10px solid white;
+  //border-top: 10px solid white;
   right:268px;
   //margin-bottom:10px;
 }
@@ -265,6 +309,8 @@ body {
     margin-top: 200px;
     width:700px;
 
+    cursor:pointer;
+
     tr:nth-child(odd) {
       background-color: #e6e6e6;
     }
@@ -277,13 +323,27 @@ body {
       background-color: transparent;
       td {
         margin-top:10px;
-        border-bottom: none;
       }
     }
 
     tr:nth-child(2) {
       td {
         border-top: none;
+      }
+    }
+
+    tr {
+      td {
+        border-bottom: none;
+        border-top: none;
+      }
+
+      &:hover {
+        background-color: #dbe3e6;
+      }
+
+      &:nth-child(even):hover {
+        background-color: #e1e8ea;
       }
     }
 
@@ -335,6 +395,17 @@ body {
         font-weight: bold;
         margin:0px;
         margin-bottom:2px;
+
+        .updateDate {
+          float: left;
+          font-size: 10px;
+          vertical-align: text-bottom;
+          color: #009ad5;
+          &:before {
+            content: " ";
+            font-size: 16px;
+          }
+        }
       }
 
       span {
@@ -356,7 +427,7 @@ body {
 
       h4 {
         padding-right: 12px;
-        background-image: url("../images/yellowpoint.png");
+        background-image: url("../images/yellowPoint.png");
         background-position: right center;
         background-repeat: no-repeat;
         font-size: 14px;

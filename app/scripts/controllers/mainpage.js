@@ -53,7 +53,10 @@ angular.module('midotApp')
       if ( $scope.selectedSector ) {
         f = $filter('fieldFilter')(f,'sector',$scope.selectedSector.sector);
       }
-      if ( $scope.minVolume >0 || $scope.maxVolume < 1000000000 ) {
+      if ( $scope.orgNameQuery && $scope.orgNameQuery.length > 0 ) {
+        f = $filter('fieldFilter')(f,['~name', '~alias'],$scope.orgNameQuery);
+      }
+      if ( $scope.minVolume >0 || $scope.maxVolume < 750000000 ) {
         f = $filter('fieldRangeFilter')(f, 'volume_2013', $scope.minVolume, $scope.maxVolume);
       }
       if ( $scope.selectedLocationArea ) {
@@ -97,7 +100,7 @@ angular.module('midotApp')
       that.updatePie(stats[$scope.selectedStat]);
     }
 
-    $scope.$watchGroup(['query','selectedSector', 'minVolume', 'maxVolume', 'selectedLocationArea', 'selectedOperationField'],
+    $scope.$watchGroup(['query','selectedSector', 'minVolume', 'maxVolume', 'selectedLocationArea', 'selectedOperationField', 'orgNameQuery'],
       function() {
         updateFiltered();
       }
@@ -144,7 +147,7 @@ angular.module('midotApp')
           3: ['50 מיליון', 50000000],
           2: ['100 מיליון', 100000000],
           1: ['500 מיליון', 500000000],
-          0: ['מיליארד', 1000000000]
+          0: ['750 מיליון', 750000000]
         };
         that.minVolumeLabel = x[values[1]][0];
         that.maxVolumeLabel = x[values[0]][0];
@@ -181,7 +184,8 @@ angular.module('midotApp')
         height = 220,
         radius = Math.min(width, height) / 2;
 
-      var color = d3.scale.category20();
+      var color = d3.scale.ordinal()
+        .range(['#009bd5','#eec100','#00b8af','#89b804','#00a854','#4cb8e2','#f3d34c','#4ccdc7','#adce4f','#4cc287']);
 
       var arc = d3.svg.arc()
         .outerRadius(radius - 10)

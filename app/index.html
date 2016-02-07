@@ -28,7 +28,13 @@
         <div class="col-lg-3 right-col"  >
           <div class="logo"></div>
           <form class="filters">
-            <div id="custom-search-input">
+            <div id="org-search-input">
+              <div class="input-group" style="width: 100%">
+                <input type="text" class="search-query form-control" placeholder="חיפוש שם ארגון"ng-model="orgNameQuery">
+              </div>
+            </div>
+            <br/>
+            <div id="free-search-input">
               <div class="input-group" style="width: 100%">
                 <input type="text" class="search-query form-control" placeholder="חיפוש חופשי"  ng-model="query">
               </div>
@@ -39,6 +45,19 @@
                       ng-options="x.sector for x in (main.rows | unique:'sector' ) track by x.sector">
                 <option selected value="">כל הסיווגים</option>
                 <option value="">הכל</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <select id="locationAreaFilter" class="form-control" ng-model="selectedLocationArea"
+                      ng-options="x.location_area for x in (main.rows | unique:'location_area' ) track by x.location_area">
+                <option selected value="">כל איזורי הפעילות</option>
+                <option value="">הכל</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <select id="operationFieldFilter" class="form-control" ng-model="selectedOperationField"
+                      ng-options="x for x in main.operation_fields track by x">
+                <option selected value="">כל תחומי הפעילות</option>
               </select>
             </div>
             <div class="volumeLabel">
@@ -56,35 +75,11 @@
                    data-slider-value="[0,8]"
                    data-slider-tooltip="hide"
             />
-            <div class="form-group">
-              <select id="locationAreaFilter" class="form-control" ng-model="selectedLocationArea"
-                      ng-options="x.location_area for x in (main.rows | unique:'location_area' ) track by x.location_area">
-                <option selected value="">כל איזורי הפעילות</option>
-                <option value="">הכל</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <select id="operationFieldFilter" class="form-control" ng-model="selectedOperationField"
-                      ng-options="x for x in main.operation_fields track by x">
-                <option selected value="">כל תחומי הפעילות</option>
-              </select>
+            <div class="searchResults">
+              {{ main.filteredRows.length }} תוצאות חיפוש
+              <span class="searchResultsBtn" ng-click="main.downloadData(main.filteredRows)">&nbsp;</span>
             </div>
           </form>
-          <div class="btn-group">
-            <button type="button" class="btn btn-sm  btn-default dropdown-toggle excel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <!--<span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>-->
-              שמירה לקובץ Excel
-              <!--<span class="excel"></span>-->
-            </button>
-            <ul class="dropdown-menu">
-              <li><a ng-click="main.downloadData(main.rows)" href="#">כל הרשומות
-              ({{ main.rows.length }} רשומות)
-              </a></li>
-              <li><a ng-click="main.downloadData(main.filteredRows)" href="#">הרשומות המסוננות בלבד
-                ({{ main.filteredRows.length }} רשומות)
-              </a></li>
-            </ul>
-          </div>
           <hr/>
           <form class="visualization-select form-inline">
             <strong>פילוח לפי: </strong>
@@ -99,6 +94,7 @@
               </div>
             </div>
           </div-->
+          <img src="images/midotMigdal.jpg">
         </div>
         <div class="col-lg-9 left-col">
           <div>
@@ -113,7 +109,7 @@
             <thead>
               <th>שם הארגון</th>
               <th>שנת ייסוד</th>
-              <th>מחזור כספי (₪)</th>
+              <th>מחזור כספי 2013 (₪)</th>
               <th>איזור פעילות</th>
               <th>סיווג ענפי</th>
               <th>תחומי פעילות</th>
@@ -136,14 +132,16 @@
                   <p>{{ row.operation_field }}</p>
                   <p ng-if="row.operation_field_2">{{ row.operation_field_2 }}</p>
                 </td>
-                <td>{{ row.target_audience }}</td>
+                <td>{{ row.target_audience | characters:25}}</td>
                 <td>{{ row.employee_num }}</td>
               </tr>
               <tr ng-repeat-end ng-if="row === selectedRow">
                 <td colspan="8">
                   <div class="card card-default" id="detail-card" style="width:100%">
                     <div class="card-heading">
-                      <h4>{{ row.alias || row.name }} ({{ row.reg_kind }})</h4>
+                      <h4>{{ row.alias || row.name }} ({{ row.reg_kind }})
+                        <span ng-if="row.update_date" class="updateDate">תאריך עדכון: {{row.update_date}}</span>
+                      </h4>
                       <span><strong>ע״ר  {{row.reg_id}}</strong></span>|
                       <span><strong>שנת יסוד: </strong>{{row.year}}</span>|
                       <span><strong>אישור ניהול תקין: </strong>{{row.cert_proper}}</span>|
@@ -163,14 +161,14 @@
                           <div class="row">
                             <div class="col-sm-6">
                               <p ng-if="row.income_gov_pct"><strong>שיעור הכנסות מרשויות: </strong>{{row.income_gov_pct}}%</p>
-                              <p ng-if="row.income_phil_pct"><strong>שיעור הכנסות מפילנתרופיה: </strong>{{row.income_phil_pct}}%</p>
-                            </div>
-                            <div class="col-sm-6">
+                              <p ng-if="row.income_phil_pct"><strong>שיעור הכנסות מפילנתרופיה (כולל שווה כסף):</strong>{{row.income_phil_pct}}%</p>
                               <p ng-if="row.income_equiv_pct"><strong>שיעור הכנסות בשווי ערך: </strong>{{row.income_equiv_pct}}%</p>
                               <p ng-if="row.income_internal_pct"><strong>שיעור הכנסות עצמיות: </strong>{{row.income_internal_pct}}%</p>
                             </div>
+                            <div class="col-sm-6">
+                              <p ng-if="row.spending_admin_pct"><strong>שיעור הוצאות הנה"כ, כולל גיוס משאבים: </strong>{{row.spending_admin_pct}}%</p>
+                            </div>
                           </div>
-                          <p ng-if="row.spending_admin_pct"><strong>שיעור הוצאות הנה"כ, כולל גיוס משאבים: </strong>{{row.spending_admin_pct}}%</p>
                         </span>
                       </div>
                       <hr/>
@@ -234,6 +232,27 @@
                           <p ng-if="row.awards"><br/><strong>אותות ופרסים:</strong>{{ row.awards }}</p>
                         </div>
                       </div>
+                      <hr/>
+                      <div ng-if="row.address || row.phone1 || row.email || row.website" class="row">
+                        <div class="col-sm-12">
+                          <h4>פרטי התקשרות</h4>
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <p ng-if="row.address &amp;&amp; row.town"><strong>כתובת: </strong> {{ row.address }}, {{ row.town }}</p>
+                              <p ng-if="row.phone1"><strong>טלפון: </strong>
+                                {{ row.phone1 }}
+                                <span ng-if="row.phone2">
+                                  &nbsp;{{ row.phone2 }}
+                                </span>
+                              </p>
+                            </div>
+                            <div class="col-sm-6">
+                              <p ng-if="row.email"><strong> דוא״ל:</strong><a ng-href="{{ 'mailto:' + row.email }}">{{ row.email }}</a></p>
+                              <p ng-if="row.website"><strong> אתר:</strong><a ng-href="{{row.website}}" target="_blank">{{ row.website }}</a></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </td>
@@ -291,6 +310,7 @@
         <script src="scripts/filters/unique.js"></script>
         <script src="scripts/filters/fieldfilter.js"></script>
         <script src="scripts/filters/fieldrangefilter.js"></script>
+        <script src="scripts/filters/characters.js"></script>
         <!-- endbuild -->
 </body>
 </html>
