@@ -264,12 +264,16 @@ angular.module('midotApp')
     angular.element($window).bind('resize', onResize);
     $(onResize);
     $(function() {
-      $('select[multiple]').multiselect({
-        buttonWidth: '220px',
-        nonSelectedText: 'כל תחומי הפעילות',
-        allSelectedText: 'כל תחומי הפעילות',
-        nSelectedText: 'תחומים נבחרו',
-        numberDisplayed: 1
+      rows.then(function() {
+        $window.setTimeout(function() {
+          $('select[multiple]').multiselect({
+            buttonWidth: '220px',
+            nonSelectedText: 'כל תחומי הפעילות',
+            allSelectedText: 'כל תחומי הפעילות',
+            nSelectedText: 'תחומים נבחרו',
+            numberDisplayed: 1
+          });
+        }, 500);
       });
     });
 
