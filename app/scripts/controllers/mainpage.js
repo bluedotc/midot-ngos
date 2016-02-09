@@ -102,7 +102,6 @@ angular.module('midotApp')
 
     $scope.$watchGroup(['query','selectedSector', 'minVolume', 'maxVolume', 'selectedLocationArea', 'selectedOperationField', 'orgNameQuery'],
       function() {
-        console.log($scope.selectedOperationField);
         updateFiltered();
         onResize();
       }
@@ -110,7 +109,6 @@ angular.module('midotApp')
 
     $scope.$watchGroup(['selectedStat'],
       function() {
-        console.log('selectedStat changed!');
         if (that.updatePie) {
           that.updatePie(that.stats[$scope.selectedStat]);
         }
@@ -266,7 +264,7 @@ angular.module('midotApp')
     angular.element($window).bind('resize', onResize);
     $(onResize);
     $(function() {
-      $('select[multiple=multiple]').multiselect({
+      $('select[multiple]').multiselect({
         buttonWidth: '220px',
         nonSelectedText: 'כל תחומי הפעילות',
         allSelectedText: 'כל תחומי הפעילות',
