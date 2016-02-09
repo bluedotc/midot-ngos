@@ -8,9 +8,11 @@
  * Factory in the midotApp.
  */
 angular.module('midotApp')
-  .factory('rows', function (Tabletop, $q, $window) {
+  .factory('rows', function (Tabletop, $q, $window, $loading) {
+    $loading.start('data');
     return $q(function(resolve) {
       if ( $window.localStorage && $window.localStorage.data && $window.localStorage.date + 3600*1000 > Date.now() ) {
+        $loading.finish('data');
         resolve(JSON.parse($window.localStorage.data));
       } else {
         Tabletop.then(function(t) {
@@ -55,6 +57,7 @@ angular.module('midotApp')
             $window.localStorage.data = JSON.stringify(data);
             $window.localStorage.date = Date.now();
           }
+          $loading.finish('data');
           resolve(data);
         });
       }

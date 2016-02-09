@@ -40,6 +40,9 @@ module.exports = function(config) {
       'bower_components/windows-1255/windows-1255.js',
       'bower_components/d3/d3.js',
       'bower_components/d3-tip/index.js',
+      'bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js',
+      'bower_components/spin.js/spin.js',
+      'bower_components/angular-loading/angular-loading.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",

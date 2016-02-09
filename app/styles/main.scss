@@ -125,6 +125,7 @@ body {
   z-index:1;
   right:10px;
   overflow-y: scroll;
+  overflow-x: visible;
 
   select {
     background-color: #cceaf6;
@@ -219,10 +220,21 @@ body {
     width: 220px;
   }
 
-  .btn-group {
-    float:left;
-    margin-left:20px;
-    margin-bottom:15px;
+  .multiselect-container>li>a>label {
+    padding-right: 5px;
+  }
+  button.multiselect {
+    background-color: #cceaf6;
+    color: #323232;
+    width:220px;
+    text-align: right;
+
+    .caret {
+      float:right;
+      margin-top: 8px;
+      margin-right: -6px;
+      margin-left: 9px;
+    }
   }
 
   .visualization-select {
@@ -457,4 +469,20 @@ body {
 select {
   font-size: 14px;
   color: #323232;
+}
+
+.hasadna-logo {
+  position:fixed;
+  left: 0px;
+  bottom: 0px;
+  margin:2px;
+  background-image: url("../images/hasadna-logo-light340.png");
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding-left:160px;
+  font-size:12px;
+  color:#323232;
+  background-color: #fff;
+  opacity: 0.8;
+  cursor:pointer;
 }

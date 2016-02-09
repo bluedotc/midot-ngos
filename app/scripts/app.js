@@ -16,7 +16,8 @@
       'ngRoute',
       'ngSanitize',
       'ngTouch',
-      'times.tabletop'
+      'times.tabletop',
+      'darthwade.dwLoading'
   ]);
   app.config(function(TabletopProvider){
     TabletopProvider.setTabletopOptions({

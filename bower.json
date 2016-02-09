@@ -19,7 +19,10 @@
     "papaparse": "~4.1.2",
     "windows-1255": "~0.1.2",
     "d3": "~3.5.14",
-    "d3-tip": "~0.6.7"
+    "d3-tip": "~0.6.7",
+    "bootstrap-multiselect": "~0.9.13",
+    "spin.js": "~2.3.2",
+    "angular-loading": "~0.1.4"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"

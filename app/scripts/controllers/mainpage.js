@@ -8,7 +8,7 @@
  * Controller of the midotApp
  */
 angular.module('midotApp')
-  .controller('MainpageCtrl', function (rows, $scope, $filter) {
+  .controller('MainpageCtrl', function (rows, $scope, $filter, $window) {
     var that = this;
     this.selectedRow = null;
     this.rows = [];
@@ -62,7 +62,7 @@ angular.module('midotApp')
       if ( $scope.selectedLocationArea ) {
         f = $filter('fieldFilter')(f, 'location_area', $scope.selectedLocationArea.location_area);
       }
-      if ( $scope.selectedOperationField ) {
+      if ( $scope.selectedOperationField && $scope.selectedOperationField.length > 0 ) {
         f = $filter('fieldFilter')(f, ['operation_field', 'operation_field_2'], $scope.selectedOperationField);
       }
       that.filteredRows = f;
@@ -102,7 +102,9 @@ angular.module('midotApp')
 
     $scope.$watchGroup(['query','selectedSector', 'minVolume', 'maxVolume', 'selectedLocationArea', 'selectedOperationField', 'orgNameQuery'],
       function() {
+        console.log($scope.selectedOperationField);
         updateFiltered();
+        onResize();
       }
     );
 
@@ -242,5 +244,38 @@ angular.module('midotApp')
       }
 
       return update;
+    };
+
+    var onResize = function() {
+      var viewport = $(window).width();
+      var leftCol = $('.left-col');
+      var rightCol = $('.right-col');
+      var left = leftCol.outerWidth();
+      var right = rightCol.outerWidth();
+      var margin = 10;
+      var spare = viewport - left - right - 2*margin;
+      if ( spare < 0 ) {
+        spare = 0;
+      }
+      var align = spare/2;
+      rightCol.css('right',(align+margin)+'px');
+      leftCol.css('right',(align+margin+right+margin)+'px');
+      $('.upper-text').css('right',(align+margin+right+margin+5)+'px');
+      $('.left-col thead').css('right',(align+margin+right+margin+10)+'px');
+    };
+    angular.element($window).bind('resize', onResize);
+    $(onResize);
+    $(function() {
+      $('select[multiple=multiple]').multiselect({
+        buttonWidth: '220px',
+        nonSelectedText: 'כל תחומי הפעילות',
+        allSelectedText: 'כל תחומי הפעילות',
+        nSelectedText: 'תחומים נבחרו',
+        numberDisplayed: 1
+      });
+    });
+
+    this.hasadna = function() {
+      $window.open('http://www.hasadna.org.il','_blank');
     };
   });

@@ -20,10 +20,26 @@ angular.module('midotApp')
     }
     return function (arr,field,query) {
       if ( query ) {
+        if ( query.constructor !== Array ) {
+          query = [query];
+        }
         if ( field.constructor === Array ) {
-          return _.filter(arr, function(e) { return _.some(field, function(f) { return match(e,f,query); }); });
+          return _.filter(arr,
+            function(e) {
+              return _.some(field, function(f) {
+                return _.some(query, function(q) {
+                  return match(e,f,q);
+                });
+              });
+            });
         } else {
-          return _.filter(arr, function(e) { return match(e,field,query); });
+          return _.filter(arr,
+            function(e) {
+              return _.some(query,
+                function(q) {
+                  return match(e,field,q);
+                });
+            });
         }
       } else {
         return arr;
