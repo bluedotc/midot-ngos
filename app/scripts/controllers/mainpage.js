@@ -19,7 +19,7 @@ angular.module('midotApp')
       that.columns = data.columns;
       that.headers = data.headers;
       that.rows = data.amutot;
-      that.subjects = data.subjects;
+      //that.subjects = data.subjects;
       that.stats = {};
       that.operation_fields =
         _.sortBy(
@@ -38,7 +38,7 @@ angular.module('midotApp')
       var max = d3.sum(_.values(ret));
       ret = _.sortBy(_.pairs(ret), function(d) { return -d[1]; });
       _.forEach(ret, function(d,i) {
-        d[0] = d[0].replace('בין ','').replace(new RegExp(' מיליון','g'), 'M');
+        d[0] = d[0].replace('בין ','').replace(new RegExp(' מיליון','g'), "מ׳");
         d.push( (100*d[1])/max );
         d.push(field);
         d.push(i);

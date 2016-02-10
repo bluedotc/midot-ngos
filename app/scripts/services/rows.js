@@ -19,10 +19,11 @@ angular.module('midotApp')
           var data = {
             amutot: t[0].amutot.elements.slice(1),
             columns: t[0].amutot.column_names,
-            headers: t[0].amutot.elements[0],
-            subjects: _.object(_.map(t[0].subjects.elements,function(d){
-              return [d.subject.trim(), d.text];
-            }))
+            headers: t[0].amutot.elements[0]
+            //,
+            //subjects: _.object(_.map(t[0].subjects.elements,function(d){
+            //  return [d.subject.trim(), d.text];
+            //}))
           };
           data.headers = _.map(t[0].amutot.column_names, function(h) {
             return data.headers[h];

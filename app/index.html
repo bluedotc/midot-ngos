@@ -79,7 +79,7 @@
             />
             <div class="searchResults">
               {{ main.filteredRows.length }} תוצאות חיפוש
-              <span class="searchResultsBtn" ng-click="main.downloadData(main.filteredRows)">&nbsp;</span>
+              <span class="searchResultsBtn" ng-click="main.downloadData(main.filteredRows)" title="ייצוא תוצאות החיפוש לקובץ אקסל">&nbsp;</span>
             </div>
           </form>
           <hr/>
@@ -100,12 +100,18 @@
         </div>
         <div class="col-lg-9 left-col" dw-loading="data" dw-loading-options="{text: 'טוען נתונים...'}">
           <div>
-            <div class="upper-text" ng-if="main.subjects[selectedSector.sector]">
-              {{ main.subjects[selectedSector.sector] }}
+            <div class="upper-text">
+"המפה החברתית" הינו מיזם חדשני של ארגון מידות ליצירת בסיס נתונים ראשון מסוגו, המאפשר לציבור הרחב לקבל תמונה רחבה ומקיפה על
+הארגונים החברתיים הפועלים בשדה החברתי על פי עניין אישי ועל בסיס פרמטרים משותפים.  בשלב ראשון, נסקרו ע"י מידות כ-600 ארגונים
+חברתיים תקציבם מעל 1 מיליון ₪, או ארגונים שעברו תהליכים במידות מיום הקמתה.  אנו מזמינים כל ארגון ללא כוונת רווח באשר הוא להיכלל
+במאגר.
             </div>
-            <div class="upper-text" ng-if="!main.subjects[selectedSector.sector]">
-              {{ main.subjects['*'] }}
-            </div>
+            <!--<div class="upper-text" ng-if="main.subjects[selectedSector.sector]">-->
+              <!--{{ main.subjects[selectedSector.sector] }}-->
+            <!--</div>-->
+            <!--<div class="upper-text" ng-if="!main.subjects[selectedSector.sector]">-->
+              <!--{{ main.subjects['*'] }}-->
+            <!--</div>-->
           </div>
           <table class="table table-striped table-hover">
             <thead>
@@ -163,7 +169,7 @@
                           <div class="row">
                             <div class="col-sm-6">
                               <p ng-if="row.income_gov_pct"><strong>שיעור הכנסות מרשויות: </strong>{{row.income_gov_pct}}%</p>
-                              <p ng-if="row.income_phil_pct"><strong>שיעור הכנסות מפילנתרופיה (כולל שווה כסף):</strong>{{row.income_phil_pct}}%</p>
+                              <p ng-if="row.income_phil_pct"><strong>שיעור הכנסות מפילנתרופיה:</strong>{{row.income_phil_pct}}%</p>
                               <p ng-if="row.income_equiv_pct"><strong>שיעור הכנסות בשווי ערך: </strong>{{row.income_equiv_pct}}%</p>
                               <p ng-if="row.income_internal_pct"><strong>שיעור הכנסות עצמיות: </strong>{{row.income_internal_pct}}%</p>
                             </div>
