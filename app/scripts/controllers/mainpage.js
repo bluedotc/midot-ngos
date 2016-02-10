@@ -50,17 +50,17 @@ angular.module('midotApp')
     function updateFiltered() {
       var f = $filter('filter')(that.rows, $scope.query);
       var stats = {};
-      if ( $scope.selectedSector ) {
-        f = $filter('fieldFilter')(f,'sector',$scope.selectedSector.sector);
-      }
       if ( $scope.orgNameQuery && $scope.orgNameQuery.length > 0 ) {
         f = $filter('fieldFilter')(f,['~name', '~alias'],$scope.orgNameQuery);
       }
       if ( $scope.minVolume >0 || $scope.maxVolume < 750000000 ) {
         f = $filter('fieldRangeFilter')(f, 'volume_2013', $scope.minVolume, $scope.maxVolume);
       }
-      if ( $scope.selectedLocationArea ) {
-        f = $filter('fieldFilter')(f, 'location_area', $scope.selectedLocationArea.location_area);
+      if ( $scope.selectedSector && $scope.selectedSector.length > 0  ) {
+        f = $filter('fieldFilter')(f,'sector',$scope.selectedSector);
+      }
+      if ( $scope.selectedLocationArea && $scope.selectedLocationArea.length > 0 ) {
+        f = $filter('fieldFilter')(f, 'location_area', $scope.selectedLocationArea);
       }
       if ( $scope.selectedOperationField && $scope.selectedOperationField.length > 0 ) {
         f = $filter('fieldFilter')(f, ['operation_field', 'operation_field_2'], $scope.selectedOperationField);
@@ -266,12 +266,16 @@ angular.module('midotApp')
     $(function() {
       rows.then(function() {
         $window.setTimeout(function() {
-          $('select[multiple]').multiselect({
-            buttonWidth: '220px',
-            nonSelectedText: 'כל תחומי הפעילות',
-            allSelectedText: 'כל תחומי הפעילות',
-            nSelectedText: 'תחומים נבחרו',
-            numberDisplayed: 1
+          $('select[multiple]').each(function() {
+            var placeholder = $(this).attr('data-placeholder');
+            var kind = $(this).attr('data-kind');
+            $(this).multiselect({
+              buttonWidth: '220px',
+              nonSelectedText: placeholder,
+              allSelectedText: placeholder,
+              nSelectedText: kind + ' ' + 'נבחרו',
+              numberDisplayed: 1
+            });
           });
         }, 500);
       });

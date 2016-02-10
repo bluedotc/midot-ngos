@@ -226,6 +226,11 @@ body {
   .multiselect-container>li>a>label {
     padding-right: 5px;
   }
+
+  ul.multiselect-container.dropdown-menu {
+    width:220px;
+    overflow-x:hidden;
+  }
   button.multiselect {
     background-color: #cceaf6;
     color: #323232;

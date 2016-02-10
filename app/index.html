@@ -44,21 +44,25 @@
             <br/>
             <div class="form-group">
               <select id="sectorFilter" class="form-control" ng-model="selectedSector"
-                      ng-options="x.sector for x in (main.rows | unique:'sector' ) track by x.sector">
-                <option selected value="">כל הסיווגים</option>
-                <option value="">הכל</option>
+                      ng-options="x.sector as x.sector for x in (main.rows | unique:'sector' )"
+                      data-placeholder="כל הסיווגים"
+                      data-kind="סיווגים"
+                      multiple="multiple">
               </select>
             </div>
             <div class="form-group">
               <select id="locationAreaFilter" class="form-control" ng-model="selectedLocationArea"
-                      ng-options="x.location_area for x in (main.rows | unique:'location_area' ) track by x.location_area">
-                <option selected value="">כל איזורי הפעילות</option>
-                <option value="">הכל</option>
+                      ng-options="x.location_area as x.location_area for x in (main.rows | unique:'location_area' )"
+                      data-placeholder="כל איזורי הפעילות"
+                      data-kind="איזורים"
+                      multiple="multiple">
               </select>
             </div>
             <div class="form-group">
               <select id="operationFieldFilter" class="form-control" ng-model="selectedOperationField"
                       ng-options="x for x in main.operation_fields track by x"
+                      data-placeholder="כל תחומי הפעילות"
+                      data-kind="תחומים"
                       multiple="multiple">
               </select>
             </div>
