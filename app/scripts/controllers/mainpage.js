@@ -256,7 +256,7 @@ angular.module('midotApp')
         spare = 0;
       }
       var align = spare/2;
-      rightCol.css('right',(align+margin)+'px');
+      rightCol.css('margin-right',(align+margin+50)+'px');
       leftCol.css('right',(align+margin+right+margin)+'px');
       $('.upper-text').css('right',(align+margin+right+margin+5)+'px');
       $('.left-col thead').css('right',(align+margin+right+margin+10)+'px');
