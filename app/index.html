@@ -29,7 +29,7 @@
       <div class="row">
         <div class="col-lg-3 right-col"  >
           <div class="logo"></div>
-          <form class="filters">
+          <form class="filters" ng-cloak>
             <div id="org-search-input">
               <div class="input-group" style="width: 100%">
                 <input type="text" class="search-query form-control" placeholder="חיפוש שם ארגון"ng-model="orgNameQuery">
@@ -128,7 +128,7 @@
               <th>קהל יעד</th>
               <th>מספר עובדים</th>
             </thead>
-            <tbody>
+            <tbody ng-cloak>
               <tr><td><div></div></td></tr>
               <tr ng-repeat-start="row in main.filteredRows"
                   ng-click="main.onClick(row)"
